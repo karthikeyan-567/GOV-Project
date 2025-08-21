@@ -1,6 +1,7 @@
 import React from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation ,Link } from "react-router-dom";
 import "../styles/Topics.css";
+
 
 const Topics = () => {
   const navigate = useNavigate();
@@ -25,8 +26,11 @@ const Topics = () => {
   return (
     <div className="topics-container">
       <h1>
+        
         {language === "en" ? "Select a Topic" : "தலைப்பை தேர்ந்தெடுக்கவும்"}
       </h1>
+               {language === "en" ? <Link style={{backgroundColor:" tomato" , padding:"10px" , color:"black" , textDecoration:"none " , fontWeight:"extrabold",fontSize:"20px" , position:"relative" , right:"600px" , borderRadius:"10px" , boxShadow:"5px 5px 10px black"} } to="/levels">◀️ Back</Link> : <Link style={{backgroundColor:" tomato" , padding:"10px" , color:"black" , textDecoration:"none " , fontWeight:"extrabold",fontSize:"20px" , position:"relative" , right:"600px" , borderRadius:"10px" , boxShadow:"5px 5px 10px black"} } to="/levels">◀️ பின் செல்ல</Link> }
+
       <div className="topics-grid">
         {topics.map((topic, index) => (
           <button
