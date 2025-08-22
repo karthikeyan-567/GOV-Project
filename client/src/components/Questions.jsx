@@ -11,7 +11,7 @@ const Questions = () => {
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
 
-  // Map topicId to topic names (example)
+
   const topics = ["Physics", "Chemistry", "Biology"];
   const topic = topics[topicId] || "Physics";
 
