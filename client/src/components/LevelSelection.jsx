@@ -11,7 +11,7 @@ const LevelSelection = () => {
   };
 
   const levels = [
-    { id: "beginner", en: "Beginner", ta: "தொடக்கநிலை" },
+    { id: "easy", en: "easy", ta: "தொடக்கநிலை" },
     { id: "intermediate", en: "Intermediate", ta: "இடைநிலை" },
     { id: "advanced", en: "Advanced", ta: "மேம்பட்ட" }
   ];
