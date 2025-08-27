@@ -7,11 +7,14 @@ const GetStarted = () => {
 
   return (
     <div className="get-started-page">
-        <div className="get-started-page-1">
-      <h1>Welcome to Science Quiz</h1>
-      <button className="get-started-btn" onClick={() => navigate("/levels")}>
-        Get Started
-      </button>
+      <div className="get-started-page-1">
+        <h1>Welcome to Science Quiz</h1>
+        <button
+          className="get-started-btn"
+          onClick={() => navigate("/classes")}
+        >
+          Get Started
+        </button>
       </div>
     </div>
   );

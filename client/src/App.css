@@ -1,45 +1,49 @@
-body {
+
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/bg.png');
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+
+body, html, #root {
+  height: 100vh;   
+  width: 100vw;
+  overflow: hidden;  
+  color: #222;
+  background-image: url("/bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: white;
 }
 
 
-
-.app-container {
-  text-align: center;
-  min-height: 100vh;
+.container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;       
+  width: 100%;
+  padding: 20px;
 }
 
-button {
-  padding: 12px 24px;
-  margin: 10px;
-  border: none;
-  border-radius: 8px;
-  background-color: rgba(76, 175, 80, 0.9);
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s ease;
+
+
+
+
+
+.back-btn {
+  background: linear-gradient(135deg, #ff6a6a, #ff2e63);
+}
+.back-btn:hover {
+  background: linear-gradient(135deg, #ff2e63, #ff6a6a);
 }
 
-button:hover {
-  background-color: rgba(69, 160, 73, 0.9);
-}
 
-.top-right {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
+
+
+
+
+
+
