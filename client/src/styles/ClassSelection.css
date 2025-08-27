@@ -1,0 +1,108 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&family=Kalam:wght@400;700&family=Poppins:wght@700&family=Quicksand:wght@600&display=swap');
+
+.class-container {
+  min-height: 100vh;              
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 40px 20px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;              
+
+}
+
+
+.class-container h1 {
+  font-size: 52px;
+  font-weight: 800;
+  margin: 20px 0 36px 0;
+  text-align: center;
+  font-family: "Kalam", cursive; 
+  
+  background: linear-gradient(90deg, #ff6ec7, #4facfe, #38ef7d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0px 4px 14px rgba(0,0,0,0.4);
+  letter-spacing: 1px;
+}
+
+
+.class-buttons {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 380px;
+
+  
+}
+
+
+.class-btn {
+  width: 100%;
+  padding: 16px 22px;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+ 
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  box-shadow: 0 10px 20px rgba(2,1,0,.2);
+
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all .2s ease-in-out;
+}
+
+.class-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+
+  box-shadow: 0 16px 28px rgba(0,0,0,.25);
+}
+
+
+.class-buttons .class-btn:nth-child(1),
+.class-buttons .class-btn:nth-child(2) {
+  font-family: "Baloo 2", cursive;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+
+.class-buttons .class-btn:nth-child(3) {
+  font-family: "Kalam", cursive;
+  background: linear-gradient(135deg, #ff9966, #ff5e62);
+}
+
+
+.class-buttons .class-btn:nth-child(4),
+.class-buttons .class-btn:nth-child(5) {
+  font-family: "Quicksand", sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+
+.class-buttons .class-btn:nth-child(6),
+.class-buttons .class-btn:nth-child(7) {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.class-buttons .class-btn:nth-child(1)::before { content: "📘"; }
+.class-buttons .class-btn:nth-child(2)::before { content: "📗"; }
+.class-buttons .class-btn:nth-child(3)::before { content: "📙"; }
+.class-buttons .class-btn:nth-child(4)::before { content: "📕"; }
+.class-buttons .class-btn:nth-child(5)::before { content: "📓"; }
+.class-buttons .class-btn:nth-child(6)::before { content: "📔"; }
+.class-buttons .class-btn:nth-child(7)::before { content: "📒"; }
+.class-buttons .class-btn:nth-child(8)::before { content: "📚"; }
