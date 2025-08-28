@@ -47,9 +47,3 @@
   color: #444;
 }
 
-/* Mobile responsive */
-@media (max-width: 480px) {
-  .puzzle-grid {
-    max-width: 220px;
-  }
-}

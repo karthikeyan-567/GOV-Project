@@ -11,12 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-<<<<<<< HEAD
-.env
 
-
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
 
 # Editor directories and files
 .vscode/*

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import "../styles/Questions.css";
-<<<<<<< HEAD
 import PuzzleGame from "./PuzzleGame";
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
 
 const Questions = () => {
   const { classId, level, topicId } = useParams();
@@ -18,10 +15,7 @@ const Questions = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
-<<<<<<< HEAD
   const [correctCount, setCorrectCount] = useState(0); // puzzle piece count
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
 
   const topics = [
     "Physics",
@@ -34,16 +28,9 @@ const Questions = () => {
     "Environmental Science",
   ];
   const topic = topics[topicId] || "Physics";
-<<<<<<< HEAD
   const milestones = [3, 5, 10];
 
 
-=======
-
-  const milestones = [3, 5, 10];
-
- 
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
   useEffect(() => {
     fetch(
       `http://localhost:5000/api/questions?lang=${language}&topic=${topic}&level=${level}`
@@ -52,23 +39,13 @@ const Questions = () => {
       .then((data) => {
         setQuestions(data);
 
-<<<<<<< HEAD
         const savedProgress = localStorage.getItem("quizProgress");
         if (savedProgress) {
           const parsed = JSON.parse(savedProgress);
-=======
-        // ✅ Restore progress AFTER questions are loaded
-        const savedProgress = localStorage.getItem("quizProgress");
-        if (savedProgress) {
-          const parsed = JSON.parse(savedProgress);
-
-          // restore only if it matches this topic/level (optional safety)
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
           setCurrentQ(parsed.currentQ || 0);
           setAnswers(parsed.answers || {});
           setFinalScore(parsed.finalScore || 0);
           setQuizCompleted(parsed.quizCompleted || false);
-<<<<<<< HEAD
 
       
           const savedCorrect = Object.keys(parsed.answers || {}).reduce(
@@ -81,17 +58,12 @@ const Questions = () => {
             0
           );
           setCorrectCount(savedCorrect);
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
         }
       })
       .catch((err) => console.error(err));
   }, [language, topic, level]);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
   useEffect(() => {
     if (questions.length > 0) {
       localStorage.setItem(
@@ -101,7 +73,6 @@ const Questions = () => {
     }
   }, [currentQ, answers, finalScore, quizCompleted, questions]);
 
-<<<<<<< HEAD
  
   const handleAnswer = (index) => {
     if (answers[currentQ] !== undefined) return; 
@@ -129,50 +100,18 @@ const Questions = () => {
       setShowCongrats(true);
       setTimeout(() => setShowCongrats(false), 3000);
     }
-=======
-  const handleAnswer = (index) => {
-    setAnswers((prev) => {
-      const newAnswers = { ...prev, [currentQ]: index };
-
-      const newScore = Object.keys(newAnswers).reduce((acc, qIdx) => {
-        return (
-          acc +
-          (questions[qIdx] && newAnswers[qIdx] === questions[qIdx].answer
-            ? 1
-            : 0)
-        );
-      }, 0);
-
-      if (milestones.includes(newScore) && newScore !== milestone) {
-        setMilestone(newScore);
-        setShowCongrats(true);
-        setTimeout(() => setShowCongrats(false), 3000);
-      }
-
-      return newAnswers;
-    });
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
   };
 
   const nextQuestion = () => {
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
-<<<<<<< HEAD
       const score = Object.keys(answers).reduce(
         (acc, qIdx) =>
           acc +
           (questions[qIdx] && answers[qIdx] === questions[qIdx].answer ? 1 : 0),
         0
       );
-=======
-      const score = Object.keys(answers).reduce((acc, qIdx) => {
-        return (
-          acc +
-          (questions[qIdx] && answers[qIdx] === questions[qIdx].answer ? 1 : 0)
-        );
-      }, 0);
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
       setFinalScore(score);
       setQuizCompleted(true);
     }
@@ -192,28 +131,16 @@ const Questions = () => {
 
   return (
     <div className="questions-container">
-<<<<<<< HEAD
-=======
-     
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
       <div style={{ marginBottom: "15px" }}>
         <Link
           className="back-btn"
           to={`/topics/${classId}/${level}?lang=${language}`}
-<<<<<<< HEAD
           onClick={() => localStorage.removeItem("quizProgress")}
-=======
-          onClick={() => localStorage.removeItem("quizProgress")} // clear when going back
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
         >
           {language === "en" ? "◀️ Back to Topics" : "◀️ தலைப்புகளுக்கு பின் செல்ல"}
         </Link>
       </div>
 
-<<<<<<< HEAD
-=======
-     
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
       {showCongrats && (
         <div className="congrats-popup">
           <h2>
@@ -224,10 +151,6 @@ const Questions = () => {
         </div>
       )}
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
       {quizCompleted ? (
         <div className="score-card">
           <h2>
@@ -286,12 +209,9 @@ const Questions = () => {
           )}
         </div>
       )}
-<<<<<<< HEAD
 
   
       <PuzzleGame correctCount={correctCount} />
-=======
->>>>>>> 98843956f9f3dcbbb7b9714dad0e2a7dfd5e2acc
     </div>
   );
 };

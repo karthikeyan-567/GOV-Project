@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema({
-  classId: String,             
-  topic: String,               
-  difficulty: String,          
+  classId: String,
+  topic: String,
+  difficulty: String,
   question_text: {
     en: String,
     ta: String
