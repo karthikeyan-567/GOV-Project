@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import "../styles/Questions.css";
+import PuzzleGame from "./PuzzleGame";
 
 const Questions = () => {
   const { classId, level, topicId } = useParams();
@@ -14,6 +15,7 @@ const Questions = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0); // puzzle piece count
 
   const topics = [
     "Physics",
@@ -26,10 +28,9 @@ const Questions = () => {
     "Environmental Science",
   ];
   const topic = topics[topicId] || "Physics";
-
   const milestones = [3, 5, 10];
 
- 
+
   useEffect(() => {
     fetch(
       `http://localhost:5000/api/questions?lang=${language}&topic=${topic}&level=${level}`
@@ -38,20 +39,30 @@ const Questions = () => {
       .then((data) => {
         setQuestions(data);
 
-        // ✅ Restore progress AFTER questions are loaded
         const savedProgress = localStorage.getItem("quizProgress");
         if (savedProgress) {
           const parsed = JSON.parse(savedProgress);
-
-          // restore only if it matches this topic/level (optional safety)
           setCurrentQ(parsed.currentQ || 0);
           setAnswers(parsed.answers || {});
           setFinalScore(parsed.finalScore || 0);
           setQuizCompleted(parsed.quizCompleted || false);
+
+      
+          const savedCorrect = Object.keys(parsed.answers || {}).reduce(
+            (acc, qIdx) =>
+              acc +
+              (data[qIdx] &&
+              parsed.answers[qIdx] === data[qIdx].answer
+                ? 1
+                : 0),
+            0
+          );
+          setCorrectCount(savedCorrect);
         }
       })
       .catch((err) => console.error(err));
   }, [language, topic, level]);
+
 
   useEffect(() => {
     if (questions.length > 0) {
@@ -62,39 +73,45 @@ const Questions = () => {
     }
   }, [currentQ, answers, finalScore, quizCompleted, questions]);
 
+ 
   const handleAnswer = (index) => {
-    setAnswers((prev) => {
-      const newAnswers = { ...prev, [currentQ]: index };
+    if (answers[currentQ] !== undefined) return; 
 
-      const newScore = Object.keys(newAnswers).reduce((acc, qIdx) => {
-        return (
-          acc +
-          (questions[qIdx] && newAnswers[qIdx] === questions[qIdx].answer
-            ? 1
-            : 0)
-        );
-      }, 0);
+    const isCorrect = questions[currentQ] && index === questions[currentQ].answer;
 
-      if (milestones.includes(newScore) && newScore !== milestone) {
-        setMilestone(newScore);
-        setShowCongrats(true);
-        setTimeout(() => setShowCongrats(false), 3000);
-      }
+    setAnswers((prev) => ({ ...prev, [currentQ]: index }));
 
-      return newAnswers;
-    });
+    if (isCorrect) {
+      setCorrectCount((prevCount) => prevCount + 1); 
+    }
+
+    const newScore = Object.keys({ ...answers, [currentQ]: index }).reduce(
+      (acc, qIdx) =>
+        acc +
+        (questions[qIdx] &&
+        { ...answers, [currentQ]: index }[qIdx] === questions[qIdx].answer
+          ? 1
+          : 0),
+      0
+    );
+
+    if (milestones.includes(newScore) && newScore !== milestone) {
+      setMilestone(newScore);
+      setShowCongrats(true);
+      setTimeout(() => setShowCongrats(false), 3000);
+    }
   };
 
   const nextQuestion = () => {
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
-      const score = Object.keys(answers).reduce((acc, qIdx) => {
-        return (
+      const score = Object.keys(answers).reduce(
+        (acc, qIdx) =>
           acc +
-          (questions[qIdx] && answers[qIdx] === questions[qIdx].answer ? 1 : 0)
-        );
-      }, 0);
+          (questions[qIdx] && answers[qIdx] === questions[qIdx].answer ? 1 : 0),
+        0
+      );
       setFinalScore(score);
       setQuizCompleted(true);
     }
@@ -114,18 +131,16 @@ const Questions = () => {
 
   return (
     <div className="questions-container">
-     
       <div style={{ marginBottom: "15px" }}>
         <Link
           className="back-btn"
           to={`/topics/${classId}/${level}?lang=${language}`}
-          onClick={() => localStorage.removeItem("quizProgress")} // clear when going back
+          onClick={() => localStorage.removeItem("quizProgress")}
         >
           {language === "en" ? "◀️ Back to Topics" : "◀️ தலைப்புகளுக்கு பின் செல்ல"}
         </Link>
       </div>
 
-     
       {showCongrats && (
         <div className="congrats-popup">
           <h2>
@@ -135,7 +150,6 @@ const Questions = () => {
           </h2>
         </div>
       )}
-
 
       {quizCompleted ? (
         <div className="score-card">
@@ -195,6 +209,9 @@ const Questions = () => {
           )}
         </div>
       )}
+
+  
+      <PuzzleGame correctCount={correctCount} />
     </div>
   );
 };
