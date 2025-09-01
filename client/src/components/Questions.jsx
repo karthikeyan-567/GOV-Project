@@ -15,7 +15,7 @@ const Questions = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0); 
+  const [correctCount, setCorrectCount] = useState(0);
 
   const topics = [
     "Physics",
@@ -30,7 +30,7 @@ const Questions = () => {
   const topic = topics[topicId] || "Physics";
   const milestones = [3, 5, 10];
 
-  
+  // Fetch questions from API
   useEffect(() => {
     fetch(
       `http://192.168.1.35:5000/api/questions?lang=${language}&topic=${topic}&level=${level}`
@@ -39,7 +39,6 @@ const Questions = () => {
       .then((data) => {
         setQuestions(data);
 
-      
         const savedProgress = localStorage.getItem("quizProgress");
         if (savedProgress) {
           const parsed = JSON.parse(savedProgress);
@@ -63,7 +62,7 @@ const Questions = () => {
       .catch((err) => console.error(err));
   }, [language, topic, level]);
 
-  // Save progress to localStorage
+  // Save progress
   useEffect(() => {
     if (questions.length > 0) {
       localStorage.setItem(
@@ -103,31 +102,28 @@ const Questions = () => {
     }
   };
 
-  // Navigation between questions
+  // Navigation
   const nextQuestion = () => {
-    if (currentQ < questions.length - 1) {
-      setCurrentQ(currentQ + 1);
-    } else {
-      const score = Object.keys(answers).reduce(
-        (acc, qIdx) =>
-          acc +
-          (questions[qIdx] && answers[qIdx] === questions[qIdx].answer ? 1 : 0),
-        0
-      );
-      setFinalScore(score);
-      setQuizCompleted(true);
-    }
+    if (currentQ < questions.length - 1) setCurrentQ(currentQ + 1);
   };
-
   const prevQuestion = () => {
-    if (currentQ > 0) {
-      setCurrentQ(currentQ - 1);
-    }
+    if (currentQ > 0) setCurrentQ(currentQ - 1);
   };
 
-  if (questions.length === 0) {
-    return <div>Loading questions...</div>;
-  }
+  // Submit handler: calculates score only for attempted questions
+  const handleSubmit = () => {
+    const attemptedScore = Object.keys(answers).reduce((acc, qIdx) => {
+      if (questions[qIdx] && answers[qIdx] !== undefined) {
+        return acc + (answers[qIdx] === questions[qIdx].answer ? 1 : 0);
+      }
+      return acc;
+    }, 0);
+
+    setFinalScore(attemptedScore);
+    setQuizCompleted(true);
+  };
+
+  if (questions.length === 0) return <div>Loading questions...</div>;
 
   const selected = answers[currentQ] ?? null;
 
@@ -140,7 +136,6 @@ const Questions = () => {
             location.pathname.startsWith("/db") ? "/db" : "/ai"
           }/topics/${classId}/${level}?lang=${language}`}
           onClick={() => {
-            // clear quiz + puzzle state when going back
             localStorage.removeItem("quizProgress");
             localStorage.removeItem("puzzle_imageIndex");
             localStorage.removeItem("puzzle_progress");
@@ -167,8 +162,8 @@ const Questions = () => {
         <div className="score-card">
           <h2>
             {language === "en"
-              ? `Quiz Completed! Your Score: ${finalScore}/${questions.length}`
-              : `வினாடி வினா முடிந்தது! உங்கள் மதிப்பெண்: ${finalScore}/${questions.length}`}
+              ? `Quiz Completed! Score: ${finalScore}/${Object.keys(answers).length} attempted`
+              : `வினாடி வினா முடிந்தது! உங்கள் மதிப்பெண்: ${finalScore}/${Object.keys(answers).length} முயற்சித்தது`}
           </h2>
         </div>
       ) : (
@@ -207,6 +202,11 @@ const Questions = () => {
                 >
                   {language === "en" ? "⬅️ Previous" : "⬅️ முந்தையது"}
                 </button>
+
+                <button className="submit-btn" onClick={handleSubmit}>
+                  {language === "en" ? "Submit 📝" : "சமர்ப்பிக்க 📝"}
+                </button>
+
                 <button className="next-btn" onClick={nextQuestion}>
                   {currentQ === questions.length - 1
                     ? language === "en"

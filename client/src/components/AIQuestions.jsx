@@ -207,8 +207,8 @@ Only return a valid JSON array. No Markdown or code fences.
           className="back-btn"
           to={`/ai/topics/${classId}/${level}?lang=${language}`}
           onClick={() => {
-            localStorage.removeItem(progressKey); 
-            resetPuzzle();
+            localStorage.removeItem(progressKey); // quiz progress
+            resetPuzzle(); // puzzle progress
             setCorrectCount(0);
           }}
         >
@@ -216,7 +216,7 @@ Only return a valid JSON array. No Markdown or code fences.
         </Link>
       </div>
 
-     
+      {/* Congrats popup */}
       {showCongrats && (
         <div className="congrats-popup">
           <h2>
@@ -227,7 +227,7 @@ Only return a valid JSON array. No Markdown or code fences.
         </div>
       )}
 
-     
+      {/* Quiz Completed */}
       {quizCompleted ? (
         <div className="score-card">
           <h2>

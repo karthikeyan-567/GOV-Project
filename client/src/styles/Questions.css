@@ -151,3 +151,35 @@
 
 
 
+.submit-btn {
+  background: #4caf50; /* green */
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.submit-btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.submit-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* space between Prev / Submit / Next */
+  margin-top: 15px;
+}
