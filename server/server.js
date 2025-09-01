@@ -34,21 +34,23 @@ app.get("/api/questions", async (req, res) => {
   try {
     const { lang = "en", topic, level, classId } = req.query;
 
+    // Build query dynamically
     const query = {};
     if (topic) query.topic = topic;
     if (level) query.difficulty = level;
-    if (classId) query.classId = classId;
+    if (classId) query.grade = classId; // Changed `classId` to match your DB field `grade`
 
     const questions = await Question.find(query);
 
     const response = questions.map((q) => ({
       id: q._id,
-      question: q.question_text[lang],
-      options: q.options.map((opt) => opt[lang]),
+      question: q.question_text?.[lang] || q.question_text?.en || "Question not available",
+      options: q.options.map((opt) => opt?.[lang] || opt?.en || "Option not available"),
       answer: q.correct_option_index,
-      explanation: q.explanation[lang],
+      explanation: q.explanation?.[lang] || q.explanation?.en || "Explanation not available",
     }));
 
+    console.log("response", response);
     res.json(response);
   } catch (err) {
     console.error(err);
@@ -56,6 +58,7 @@ app.get("/api/questions", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+
+app.listen(port,'0.0.0.0', () => {
   console.log(` Server running at http://localhost:${port}`);
 });

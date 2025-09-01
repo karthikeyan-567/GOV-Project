@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom"; // added Link
 import "../styles/ClassSelection.css";
 
 const ClassSelection = () => {
   const navigate = useNavigate();
-  const query = new URLSearchParams(useLocation().search);
+  const location = useLocation();
+
+  // detect DB or AI path
+  const isDb = location.pathname.startsWith("/db");
+  const basePath = isDb ? "/db" : "/ai";
+
+  const query = new URLSearchParams(location.search);
   const [language, setLanguage] = useState(query.get("lang") || "en");
 
   const handleLanguageToggle = () => {
@@ -23,11 +29,27 @@ const ClassSelection = () => {
 
   return (
     <div className="class-container">
+<div style={{ marginBottom: "15px" }}>
+  <button
+    className="back-btn"
+    onClick={() => navigate("/start")}
+  >
+    {language === "en" ? "◀️ Back to Start" : "◀️ தொடக்கத்திற்கு பின் செல்ல"}
+  </button>
+</div>
+
+
+
+
       <div className="class-header">
         <button className="lang-toggle" onClick={handleLanguageToggle}>
           {language === "en" ? "தமிழ்" : "English"}
         </button>
-        <h1>{language === "en" ? "Choose Your Class" : "உங்கள் வகுப்பை தேர்ந்தெடுக்கவும்"}</h1>
+        <h1>
+          {language === "en"
+            ? "Choose Your Class"
+            : "உங்கள் வகுப்பை தேர்ந்தெடுக்கவும்"}
+        </h1>
       </div>
 
       <div className="class-buttons">
@@ -35,7 +57,9 @@ const ClassSelection = () => {
           <button
             key={cls.id}
             className="class-btn"
-            onClick={() => navigate(`/levels/${cls.id}?lang=${language}`)}
+            onClick={() =>
+              navigate(`${basePath}/levels/${cls.id}?lang=${language}`)
+            }
           >
             {language === "en" ? cls.en : cls.ta}
           </button>

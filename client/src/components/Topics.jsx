@@ -5,14 +5,20 @@ import "../styles/Topics.css";
 const Topics = () => {
   const navigate = useNavigate();
   const { classId, level } = useParams();
-  const query = new URLSearchParams(useLocation().search);
+  const location = useLocation();
+
+  // detect DB or AI flow
+  const isDb = location.pathname.startsWith("/db");
+  const basePath = isDb ? "/db" : "/ai";
+
+  const query = new URLSearchParams(location.search);
   const language = query.get("lang") || "en";
 
   const topics = [
     { en: "Physics", ta: "இயற்பியல்" },
     { en: "Chemistry", ta: "வேதியியல்" },
     { en: "Biology", ta: "உயிரியல்" },
-    { en: "Earth Science", ta: "புவி அறிவியல்" },
+    { en: "General Knowledge", ta: "பொது அறிவு" },
     { en: "Astronomy", ta: "வானியல்" },
     { en: "Human Body", ta: "மனித உடல்" },
     { en: "Genetics", ta: "மரபியல்" },
@@ -23,12 +29,8 @@ const Topics = () => {
     <div className="topics-container">
       <h1>{language === "en" ? "Select a Topic" : "தலைப்பை தேர்ந்தெடுக்கவும்"}</h1>
 
-    
       <div style={{ marginBottom: "15px" }}>
-        <Link
-          className="back-btn"
-          to={`/levels/${classId}?lang=${language}`}
-        >
+        <Link className="back-btn" to={`${basePath}/levels/${classId}?lang=${language}`}>
           {language === "en" ? "◀️ Back to Levels" : "◀️ நிலைக்கு பின் செல்ல"}
         </Link>
       </div>
@@ -39,7 +41,7 @@ const Topics = () => {
             key={index}
             className="topic-btn"
             onClick={() =>
-              navigate(`/questions/${classId}/${level}/${index}?lang=${language}`)
+              navigate(`${basePath}/questions/${classId}/${level}/${index}?lang=${language}`)
             }
           >
             {language === "en" ? topic.en : topic.ta}

@@ -1,0 +1,79 @@
+.start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  /* background gradient was applied to text instead of full bg */
+
+  font-family: "Kalam", cursive; 
+
+  text-align: center;
+  text-shadow: 2px 2px 8px rgba(3, 2, 1, 0.3);
+}
+
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+   background: linear-gradient(90deg, #ff6ec4, #7873f5, #42d392);
+  font-family: "Kalam", cursive; 
+    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 2px 2px 8px rgba(3, 2, 1, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #ff6ec4, #7873f5, #42d392);
+  font-family: "Kalam", cursive; 
+    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 2px 2px 8px rgba(3, 2, 1, 0.3);
+}
+
+.button-group {
+  display: flex;
+  gap: 20px;
+}
+
+.start-btn {
+  text-decoration: none;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.db-btn {
+  background: #ff9800;
+  color: white;
+}
+
+.db-btn:hover {
+  background: #e68900;
+}
+
+.ai-btn {
+  background: #4caf50;
+  color: white;
+}
+
+.ai-btn:hover {
+  background: #3d9140;
+}
+.ai-btn:hover {
+  background: #3d9140;
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(76, 175, 80, 0.6);
+}
+.db-btn:hover {
+  background: #e68900;
+  transform: scale(1.08);
+  box-shadow: 0 6px 14px rgba(255, 152, 0, 0.6);
+}

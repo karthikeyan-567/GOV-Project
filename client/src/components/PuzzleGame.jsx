@@ -4,54 +4,92 @@ import "../styles/PuzzleGame.css";
 const puzzleImages = [
   "/images/spiderman.png",
   "/images/Ben10.png",
+  "/images/shinchan.png",
+  "/images/jackie.png",
+  "/images/bheem.png",
 ];
+
+// localStorage keys
+const IMAGE_KEY = "puzzle_imageIndex";
+const PROGRESS_KEY = "puzzle_progress";
+const LASTCOUNT_KEY = "puzzle_lastCount";
+
+// ✅ Helper function to reset puzzle storage
+export const resetPuzzle = () => {
+  localStorage.removeItem(IMAGE_KEY);
+  localStorage.removeItem(PROGRESS_KEY);
+  localStorage.removeItem(LASTCOUNT_KEY);
+};
 
 export default function PuzzleGame({ correctCount = 0 }) {
   const rows = 3;
   const cols = 3;
-  const totalPieces = rows * cols;
+  const totalPieces = rows * cols; // 9
   const totalImages = puzzleImages.length;
-  const maxProgress = totalPieces * totalImages;
 
-  const noQuizProgress = !localStorage.getItem("quizProgress");
-
+  // Load saved imageIndex or pick a random one at first entry
   const [imageIndex, setImageIndex] = useState(() => {
-    if (noQuizProgress) {
-      const rand = Math.floor(Math.random() * totalImages);
-      localStorage.setItem("imageIndex", String(rand));
-      return rand;
-    }
-    const saved = localStorage.getItem("imageIndex");
+    const saved = localStorage.getItem(IMAGE_KEY);
+    if (saved !== null) return parseInt(saved, 10);
+    const rand = Math.floor(Math.random() * totalImages);
+    localStorage.setItem(IMAGE_KEY, String(rand));
+    return rand;
+  });
+
+  // Load saved progress (revealed pieces) or start 0
+  const [progress, setProgress] = useState(() => {
+    const saved = localStorage.getItem(PROGRESS_KEY);
     return saved !== null ? parseInt(saved, 10) : 0;
   });
 
-  const [progress, setProgress] = useState(() => {
-    if (noQuizProgress) {
-      localStorage.setItem("progress", "0");
-      return 0;
-    }
-    return parseInt(localStorage.getItem("progress") || "0", 10);
+  // Baseline of correctCount already processed
+  const [lastCount, setLastCount] = useState(() => {
+    const saved = localStorage.getItem(LASTCOUNT_KEY);
+    return saved !== null ? parseInt(saved, 10) : correctCount;
   });
 
-  useEffect(() => {
-    if (correctCount === 0) return; 
-    const newProgress = correctCount % maxProgress;
-    if (newProgress !== progress) {
-      setProgress(newProgress);
-      localStorage.setItem("progress", String(newProgress));
-    }
-  }, [correctCount, maxProgress, progress]);
+  // Helper: pick random different image if possible
+  const pickRandomDifferent = (current) => {
+    if (totalImages <= 1) return current;
+    let next = Math.floor(Math.random() * totalImages);
+    if (next === current) next = (current + 1) % totalImages;
+    return next;
+  };
 
+  // React to changes in correctCount
   useEffect(() => {
-    if (progress > 0 && progress % totalPieces === 0) {
-      const next = (imageIndex + 1) % totalImages;
-      setImageIndex(next);
-      localStorage.setItem("imageIndex", String(next));
+    if (correctCount <= lastCount) {
+      if (correctCount < lastCount) {
+        setLastCount(correctCount);
+        localStorage.setItem(LASTCOUNT_KEY, String(correctCount));
+      }
+      return;
     }
-  }, [progress, totalPieces, imageIndex, totalImages]);
 
-  const piecesForThisImage =
-    progress % totalPieces === 0 ? (progress > 0 ? totalPieces : 0) : (progress % totalPieces);
+    let delta = correctCount - lastCount;
+    let newImage = imageIndex;
+    let newProgress = progress;
+
+    while (delta > 0) {
+      if (newProgress < totalPieces) {
+        const reveal = Math.min(delta, totalPieces - newProgress);
+        newProgress += reveal;
+        delta -= reveal;
+      } else {
+        newImage = pickRandomDifferent(newImage);
+        newProgress = 1;
+        delta -= 1;
+      }
+    }
+
+    setImageIndex(newImage);
+    setProgress(newProgress);
+    setLastCount(correctCount);
+
+    localStorage.setItem(IMAGE_KEY, String(newImage));
+    localStorage.setItem(PROGRESS_KEY, String(newProgress));
+    localStorage.setItem(LASTCOUNT_KEY, String(correctCount));
+  }, [correctCount, lastCount, imageIndex, progress, totalPieces, totalImages]);
 
   const tiles = useMemo(
     () => Array.from({ length: totalPieces }, (_, i) => i),
@@ -60,7 +98,7 @@ export default function PuzzleGame({ correctCount = 0 }) {
 
   return (
     <section className="puzzle-section">
-      <h3 className="puzzle-title">🧩 Enter the Correct answers and reveal the puzzzle </h3>
+      <h3 className="puzzle-title">🧩 Answer correctly to reveal the puzzle!</h3>
 
       <div
         className="puzzle-grid"
@@ -72,16 +110,20 @@ export default function PuzzleGame({ correctCount = 0 }) {
         {tiles.map((i) => {
           const r = Math.floor(i / cols);
           const c = i % cols;
-          const show = i < piecesForThisImage;
+          const show = i < progress;
 
           return (
             <div
               key={i}
               className={`puzzle-tile ${show ? "show" : ""}`}
               style={{
-                backgroundImage: show ? `url("${puzzleImages[imageIndex]}")` : "none",
+                backgroundImage: show
+                  ? `url("${puzzleImages[imageIndex]}")`
+                  : "none",
                 backgroundSize: `${cols * 100}% ${rows * 100}%`,
-                backgroundPosition: `${(c / (cols - 1)) * 100}% ${(r / (rows - 1)) * 100}%`,
+                backgroundPosition: `${(c / (cols - 1)) * 100}% ${
+                  (r / (rows - 1)) * 100
+                }%`,
                 backgroundRepeat: "no-repeat",
               }}
             />
@@ -90,7 +132,7 @@ export default function PuzzleGame({ correctCount = 0 }) {
       </div>
 
       <div className="puzzle-progress">
-        Image {imageIndex + 1} / {totalImages} • Pieces {piecesForThisImage} / {totalPieces}
+        Image {imageIndex + 1} / {totalImages} • Pieces {progress} / {totalPieces}
       </div>
     </section>
   );

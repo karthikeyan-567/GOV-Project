@@ -5,8 +5,13 @@ import "../styles/LevelSelection.css";
 const LevelSelection = () => {
   const navigate = useNavigate();
   const { classId } = useParams();
-  const query = new URLSearchParams(useLocation().search);
-  const [language, setLanguage] = useState(query.get("lang") || "en");
+  const location = useLocation();
+
+  // detect whether we’re in DB or AI mode
+  const isDb = location.pathname.startsWith("/db");
+  const basePath = isDb ? "/db" : "/ai";
+
+  const [language, setLanguage] = useState("en");
 
   const handleLanguageToggle = () => {
     setLanguage(language === "en" ? "ta" : "en");
@@ -20,13 +25,11 @@ const LevelSelection = () => {
 
   return (
     <div className="level-container">
-      
-    <div style={{ marginBottom: "15px" }}>
-  <Link className="back-btn" to={`/classes?lang=${language}`}>
-    {language === "en" ? "◀️ Back to Classes" : "◀️ வகுப்புகளுக்கு பின் செல்ல"}
-  </Link>
-</div>
-
+      <div style={{ marginBottom: "15px" }}>
+        <Link className="back-btn" to={`${basePath}/classes?lang=${language}`}>
+          {language === "en" ? "◀️ Back to Classes" : "◀️ வகுப்புகளுக்கு பின் செல்ல"}
+        </Link>
+      </div>
 
       <button className="lang-toggle" onClick={handleLanguageToggle}>
         {language === "en" ? "தமிழ்" : "English"}
@@ -39,7 +42,7 @@ const LevelSelection = () => {
             key={level.id}
             className="level-btn"
             onClick={() =>
-              navigate(`/topics/${classId}/${level.id}?lang=${language}`)
+              navigate(`${basePath}/topics/${classId}/${level.id}?lang=${language}`)
             }
           >
             {language === "en" ? level.en : level.ta}

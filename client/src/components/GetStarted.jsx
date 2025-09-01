@@ -11,7 +11,7 @@ const GetStarted = () => {
         <h1>Welcome to Science Quiz</h1>
         <button
           className="get-started-btn"
-          onClick={() => navigate("/classes")}
+          onClick={() => navigate("/start")}
         >
           Get Started
         </button>
