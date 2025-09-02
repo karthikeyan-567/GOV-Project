@@ -180,6 +180,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px; /* space between Prev / Submit / Next */
+  gap: 15px; 
   margin-top: 15px;
 }

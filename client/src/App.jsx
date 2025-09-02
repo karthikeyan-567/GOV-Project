@@ -7,6 +7,8 @@ import Topics from "./components/Topics";
 import Questions from "./components/Questions";
 import AIQuestions from "./components/AIQuestions"; // Import the AIQuestions component
 import "./App.css";
+import ProfileLogin from "./components/ProfileLogin";
+// import Leaderboard from "./components/Leaderboard";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         
         <Route path="/" element={<GetStarted />} />
         <Route path="/start" element={<StartPage />} />
+        <Route path="/login" element={<ProfileLogin />} />
+        {/* <Route path="/lboard" element={<Leaderboard />} /> */}
 
       
         <Route path="/db/classes" element={<ClassSelection />} />

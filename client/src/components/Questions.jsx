@@ -16,7 +16,7 @@ const Questions = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-
+const [playerName, setPlayerName] = useState("");
   const topics = [
     "Physics",
     "Chemistry",
@@ -33,7 +33,7 @@ const Questions = () => {
   // Fetch questions from API
   useEffect(() => {
     fetch(
-      `http://192.168.1.35:5000/api/questions?lang=${language}&topic=${topic}&level=${level}`
+      ` http://192.168.117.59:5000/api/questions?lang=${language}&topic=${topic}&level=${level}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -46,7 +46,10 @@ const Questions = () => {
           setAnswers(parsed.answers || {});
           setFinalScore(parsed.finalScore || 0);
           setQuizCompleted(parsed.quizCompleted || false);
-
+ const storedName = localStorage.getItem("playerName");
+  if (storedName) {
+    setPlayerName(storedName); // ✅ now playerName = "karthi"
+  }
           const savedCorrect = Object.keys(parsed.answers || {}).reduce(
             (acc, qIdx) =>
               acc +
@@ -130,6 +133,19 @@ const Questions = () => {
   return (
     <div className="questions-container">
       <div style={{ marginBottom: "15px" }}>
+        <h2
+  style={{
+    marginBottom: "20px",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "24px",
+    textShadow: "0 0 5px #ab47bc, 0 0 10px #ab47bc, 0 0 20px #6a1b9a",
+    letterSpacing: "1px",
+  }}
+>
+   Player: {playerName || "Guest"}
+</h2>
+
         <Link
           className="back-btn"
           to={`${

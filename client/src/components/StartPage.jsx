@@ -25,6 +25,16 @@ const StartPage = () => {
           🤖 AI Quiz (Generated)
         </button>
       </div>
+
+      {/* 🔹 Back Button */}
+      <div className="back-container">
+        <button
+          className="start-btn back-btn"
+          onClick={() => navigate("/login")}
+        >
+          🔙 Back to Login
+        </button>
+      </div>
     </div>
   );
 };
